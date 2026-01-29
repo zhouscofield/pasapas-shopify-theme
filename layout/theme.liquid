@@ -1,7 +1,6 @@
 {% comment %}
   主布局文件 - Pas a Pas Shopify Theme
   加载全局字体、CSS变量和页面结构
-  修改LOGO文字在 header.liquid 中
 {% endcomment %}
 
 <!doctype html>
@@ -10,17 +9,13 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="theme-color" content="{{ settings.color_background }}">
+  <meta name="theme-color" content="{{ settings.color_background | default: '#000000' }}">
   <link rel="canonical" href="{{ canonical_url }}">
   <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
 
   {%- if settings.favicon != blank -%}
     <link rel="icon" type="image/png" href="{{ settings.favicon | image_url: width: 32, height: 32 }}">
   {%- endif -%}
-
-  {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}
-    <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
-  {%- endunless -%}
 
   <title>
     {{ page_title }}
@@ -33,79 +28,88 @@
     <meta name="description" content="{{ page_description | escape }}">
   {%- endif -%}
 
-  {% render 'meta-tags' %}
-
   <!-- Google Fonts - Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;700;900&display=swap" rel="stylesheet">
 
   <!-- 主题核心样式 -->
   {{ 'base.css' | asset_url | stylesheet_tag }}
-  {{ 'balenciaga-theme.css' | asset_url | stylesheet_tag }}
 
   <!-- Shopify 付款按钮 -->
   {{ content_for_header }}
 
-  <!-- JS 购物车 API -->
-  <script src="{{ 'theme.js' | asset_url }}" defer></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { 
+      font-family: 'Inter', sans-serif; 
+      background: #000; 
+      color: #fff; 
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    a { color: inherit; text-decoration: none; }
+    
+    /* 临时导航样式 */
+    .temp-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+      mix-blend-mode: difference;
+      color: white;
+    }
+    .temp-logo {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.3em;
+    }
+    
+    /* 临时页脚样式 */
+    .temp-footer {
+      padding: 40px;
+      text-align: center;
+      font-size: 12px;
+      border-top: 1px solid #333;
+      color: #888;
+    }
+  </style>
 
-  <script>
-    // 全局主题配置
-    window.theme = {
-      routes: {
-        cart_add_url: '{{ routes.cart_add_url }}',
-        cart_change_url: '{{ routes.cart_change_url }}',
-        cart_update_url: '{{ routes.cart_update_url }}',
-        cart_url: '{{ routes.cart_url }}',
-        predictive_search_url: '{{ routes.predictive_search_url }}'
-      },
-      strings: {
-        addToCart: {{ 'products.product.add_to_cart' | t | json }},
-        soldOut: {{ 'products.product.sold_out' | t | json }},
-        unavailable: {{ 'products.product.unavailable' | t | json }},
-        addedToCart: {{ 'products.product.added_to_cart' | t | json }},
-        notifyMe: {{ 'products.product.notify_me' | t | json }},
-        continueShopping: {{ 'cart.general.continue_shopping' | t | json }},
-        checkout: {{ 'cart.general.checkout' | t | json }},
-        subtotal: {{ 'cart.general.subtotal' | t | json }},
-        empty: {{ 'cart.general.empty' | t | json }}
-      },
-      moneyFormat: {{ shop.money_format | json }},
-      moneyWithCurrencyFormat: {{ shop.money_with_currency_format | json }},
-      currency: {{ shop.currency | json }}
-    };
-
-    // 检测触摸设备
-    window.matchMedia('(pointer: coarse)').matches && document.documentElement.classList.add('touch-device');
-  </script>
+  {{ 'theme.js' | asset_url | script_tag }}
 </head>
 
-<body class="template-{{ request.page_type }} {% if template == 'password' %}password-page{% endif %}">
+<body class="template-{{ request.page_type }}">
   <a class="skip-to-content-link button visually-hidden" href="#MainContent">
-    {{ "accessibility.skip_to_text" | t }}
+    Skip to content
   </a>
 
-  {% comment %} 购物车抽屉 - 全局可用 {% endcomment %}
-  {% render 'cart-drawer' %}
-
-  {% comment %} 头部导航 {% endcomment %}
-  {% section 'header' %}
+  {% comment %} 临时导航 - 简化版 {% endcomment %}
+  <header class="temp-header">
+    <div style="width: 100px;"></div>
+    <a href="/" class="temp-logo">PAS A PAS</a>
+    <a href="/cart" style="width: 100px; text-align: right; font-size: 12px; letter-spacing: 0.1em;">BAG ({{ cart.item_count }})</a>
+  </header>
 
   <main id="MainContent" class="content-for-layout focus-none" role="main" tabindex="-1">
     {{ content_for_layout }}
   </main>
 
-  {% comment %} 页脚 {% endcomment %}
-  {% section 'footer' %}
+  {% comment %} 临时页脚 - 简化版 {% endcomment %}
+  <footer class="temp-footer">
+    <p>PAS A PAS © 2024</p>
+    <p style="margin-top: 10px; font-size: 10px;">TOKYO / SHANGHAI</p>
+  </footer>
 
   <ul hidden>
-    <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t }}</li>
-    <li id="a11y-new-window-message">{{ 'accessibility.link_messages.new_window' | t }}</li>
+    <li id="a11y-refresh-page-message">{{ 'accessibility.refresh_page' | t | default: 'Refresh page' }}</li>
   </ul>
 
   <script>
-    // 页面加载完成后初始化
     window.addEventListener('load', function() {
       document.body.classList.add('loaded');
     });
