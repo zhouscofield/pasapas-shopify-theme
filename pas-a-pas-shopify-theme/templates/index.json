@@ -1,0 +1,33 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "hero_type": "image",
+        "image": "shopify://shop_images/hero-bg.jpg",
+        "video_url": "",
+        "heading_line1": "PAS",
+        "heading_line2": "A PAS",
+        "subtitle": "AUTUMN / WINTER 2024",
+        "show_scroll_indicator": true,
+        "overlay_opacity": 0
+      }
+    },
+    "featured_collection": {
+      "type": "featured-collection",
+      "settings": {
+        "title": "NEW DROP",
+        "collection": "frontpage",
+        "products_to_show": 6,
+        "columns_desktop": 3,
+        "columns_mobile": 1,
+        "show_view_all": true,
+        "view_all_text": "VIEW ALL"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "featured_collection"
+  ]
+}

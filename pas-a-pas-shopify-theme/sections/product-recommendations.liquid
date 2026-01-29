@@ -1,0 +1,116 @@
+{% comment %}
+  推荐产品区块 - 产品页底部显示
+{% endcomment %}
+
+{%- liquid
+  assign heading = section.settings.heading | default: 'YOU MAY ALSO LIKE'
+  assign products_to_show = section.settings.products_to_show | default: 4
+  assign columns_desktop = section.settings.columns_desktop | default: 4
+
+  assign recommendations = recommendations | default: product.metafields.shopify--discovery--product_recommendations.related_products
+-%}
+
+{% if recommendations != blank and recommendations.count > 0 %}
+  <section class="product-recommendations-section" data-section-id="{{ section.id }}" data-section-type="product-recommendations">
+    {% if heading != blank %}
+      <h2 class="recommendations-title">{{ heading }}</h2>
+    {% endif %}
+
+    <div class="recommendations-grid" data-columns="{{ columns_desktop }}">
+      {% for recommended_product in recommendations limit: products_to_show %}
+        <div class="recommendation-item">
+          {% render 'product-card', 
+            product: recommended_product,
+            show_quick_add: false
+          %}
+        </div>
+      {% endfor %}
+    </div>
+  </section>
+{% endif %}
+
+<style>
+  .product-recommendations-section {
+    padding: 120px 40px;
+    background: #000000;
+    border-top: 1px solid #222222;
+  }
+
+  @media (max-width: 768px) {
+    .product-recommendations-section {
+      padding: 80px 20px;
+    }
+  }
+
+  .recommendations-title {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(24px, 4vw, 36px);
+    font-weight: 700;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    text-align: center;
+    letter-spacing: 0.05em;
+    margin: 0 0 60px;
+  }
+
+  .recommendations-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 1024px) {
+    .recommendations-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    .recommendations-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Product Recommendations",
+  "tag": "section",
+  "class": "section-product-recommendations",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "标题",
+      "default": "YOU MAY ALSO LIKE"
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "label": "显示产品数量",
+      "min": 2,
+      "max": 8,
+      "step": 2,
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "label": "桌面端列数",
+      "min": 2,
+      "max": 4,
+      "step": 1,
+      "default": 4
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Recommendations",
+      "category": "Product"
+    }
+  ]
+}
+{% endschema %}
