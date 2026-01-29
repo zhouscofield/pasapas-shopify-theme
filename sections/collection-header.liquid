@@ -1,0 +1,130 @@
+{% comment %}
+  集合页头部区块
+{% endcomment %}
+
+{%- liquid
+  assign show_collection_image = section.settings.show_collection_image
+  assign show_collection_description = section.settings.show_collection_description
+-%}
+
+<section class="collection-header-section">
+  {% if show_collection_image and collection.image %}
+    <div class="collection-header-image">
+      {{ collection.image | image_url: width: 2880 | image_tag:
+        loading: 'eager',
+        class: 'collection-bg-image',
+        alt: collection.title | escape
+      }}
+      <div class="collection-header-overlay"></div>
+    </div>
+  {% endif %}
+
+  <div class="collection-header-content">
+    <h1 class="collection-title">{{ collection.title | upcase }}</h1>
+    
+    {% if show_collection_description and collection.description != blank %}
+      <div class="collection-description">
+        {{ collection.description }}
+      </div>
+    {% endif %}
+    
+    <p class="collection-product-count">
+      {{ collection.products_count }} {{ 'collections.general.products' | t }}
+    </p>
+  </div>
+</section>
+
+<style>
+  .collection-header-section {
+    position: relative;
+    padding: 180px 40px 80px;
+    background: #000000;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  @media (max-width: 768px) {
+    .collection-header-section {
+      padding: 140px 20px 60px;
+    }
+  }
+
+  .collection-header-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+  }
+
+  .collection-bg-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .collection-header-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+  }
+
+  .collection-header-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .collection-title {
+    font-family: 'Inter', sans-serif;
+    font-size: clamp(32px, 6vw, 56px);
+    font-weight: 900;
+    color: #FFFFFF;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin: 0 0 24px;
+  }
+
+  .collection-description {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #888888;
+    margin: 0 0 16px;
+  }
+
+  .collection-product-count {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #555555;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin: 0;
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Collection Header",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_collection_image",
+      "label": "Show collection image",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_collection_description",
+      "label": "Show collection description",
+      "default": true
+    }
+  ]
+}
+{% endschema %}

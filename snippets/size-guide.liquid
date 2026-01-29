@@ -1,0 +1,264 @@
+{% comment %}
+  尺码表弹窗内容
+  包含尺码表格和模特信息
+{% endcomment %}
+
+<div class="size-guide-modal" data-size-guide-modal>
+  <div class="size-guide-overlay" data-size-guide-overlay></div>
+  
+  <div class="size-guide-content">
+    <div class="size-guide-header">
+      <h3 class="size-guide-title">{{ 'products.product.size_guide' | t }}</h3>
+      <button type="button" class="size-guide-close" data-size-guide-close aria-label="{{ 'general.navigation.close' | t }}">
+        {% render 'icon-close' %}
+      </button>
+    </div>
+    
+    <div class="size-guide-body">
+      {% comment %} 尺码表 {% endcomment %}
+      <table class="size-table">
+        <thead>
+          <tr>
+            <th>SIZE</th>
+            <th>{{ 'products.product.length' | t }}</th>
+            <th>{{ 'products.product.chest' | t }}</th>
+            <th>{{ 'products.product.shoulder' | t }}</th>
+            <th>{{ 'products.product.sleeve' | t }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>S</td>
+            <td>64cm</td>
+            <td>54cm</td>
+            <td>52cm</td>
+            <td>56cm</td>
+          </tr>
+          <tr>
+            <td>M</td>
+            <td>67cm</td>
+            <td>57cm</td>
+            <td>55cm</td>
+            <td>58cm</td>
+          </tr>
+          <tr>
+            <td>L</td>
+            <td>70cm</td>
+            <td>60cm</td>
+            <td>58cm</td>
+            <td>60cm</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      {% comment %} 模特信息 {% endcomment %}
+      <p class="model-info">
+        *{{ 'products.product.model_info' | t }}
+      </p>
+      
+      {% comment %} 测量说明 {% endcomment %}
+      <div class="measurement-guide">
+        <h4>{{ 'products.product.how_to_measure' | t }}</h4>
+        <ul>
+          <li><strong>{{ 'products.product.length' | t }}:</strong> {{ 'products.product.length_desc' | t }}</li>
+          <li><strong>{{ 'products.product.chest' | t }}:</strong> {{ 'products.product.chest_desc' | t }}</li>
+          <li><strong>{{ 'products.product.shoulder' | t }}:</strong> {{ 'products.product.shoulder_desc' | t }}</li>
+          <li><strong>{{ 'products.product.sleeve' | t }}:</strong> {{ 'products.product.sleeve_desc' | t }}</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .size-guide-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 4000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .size-guide-modal.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .size-guide-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+  }
+
+  .size-guide-content {
+    position: relative;
+    background: #FFFFFF;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 1;
+  }
+
+  .size-guide-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    border-bottom: 1px solid #EEEEEE;
+  }
+
+  .size-guide-title {
+    font-family: 'Inter', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: #000000;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0;
+  }
+
+  .size-guide-close {
+    background: none;
+    border: none;
+    color: #000000;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease;
+  }
+
+  .size-guide-close:hover {
+    opacity: 0.5;
+  }
+
+  .size-guide-body {
+    padding: 24px;
+  }
+
+  /* 尺码表 */
+  .size-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+  }
+
+  .size-table th,
+  .size-table td {
+    padding: 16px;
+    text-align: center;
+    border: 1px solid #EEEEEE;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+  }
+
+  .size-table th {
+    background: #000000;
+    color: #FFFFFF;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .size-table td {
+    color: #000000;
+    font-weight: 400;
+  }
+
+  .size-table tr:nth-child(even) td {
+    background: #F5F5F5;
+  }
+
+  /* 模特信息 */
+  .model-info {
+    font-family: 'Inter', sans-serif;
+    font-size: 12px;
+    color: #888888;
+    margin: 0 0 24px;
+    font-style: italic;
+  }
+
+  /* 测量说明 */
+  .measurement-guide {
+    padding-top: 24px;
+    border-top: 1px solid #EEEEEE;
+  }
+
+  .measurement-guide h4 {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #000000;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 0 0 16px;
+  }
+
+  .measurement-guide ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .measurement-guide li {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    color: #555555;
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+
+  .measurement-guide li strong {
+    color: #000000;
+  }
+
+  /* 禁止背景滚动 */
+  body.size-guide-open {
+    overflow: hidden;
+  }
+</style>
+
+<script>
+  // 尺码表弹窗交互
+  (function() {
+    const modal = document.querySelector('[data-size-guide-modal]');
+    const overlay = document.querySelector('[data-size-guide-overlay]');
+    const closeBtn = document.querySelector('[data-size-guide-close]');
+    const toggleBtns = document.querySelectorAll('[data-size-guide-toggle]');
+
+    function openModal() {
+      modal.classList.add('active');
+      document.body.classList.add('size-guide-open');
+    }
+
+    function closeModal() {
+      modal.classList.remove('active');
+      document.body.classList.remove('size-guide-open');
+    }
+
+    toggleBtns.forEach(function(btn) {
+      btn.addEventListener('click', openModal);
+    });
+
+    closeBtn.addEventListener('click', closeModal);
+    overlay.addEventListener('click', closeModal);
+
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && modal.classList.contains('active')) {
+        closeModal();
+      }
+    });
+  })();
+</script>
